@@ -1,0 +1,16 @@
+.main {
+    width: min(100vw - 32px, 900px);
+    margin: 0 auto;
+    height: 100vh;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: space-between;
+    // outline: 1px solid blue;
+
+    h1 {
+        color: white;
+        margin: 0;
+        text-align: center;
+        margin: .5rem 0 .5rem 0;
+    }
+}

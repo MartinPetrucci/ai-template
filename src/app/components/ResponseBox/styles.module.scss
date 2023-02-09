@@ -1,0 +1,67 @@
+@import "../../variables.scss";
+
+.response-box {
+  // outline: 1px solid grey;
+  // min-height: 30vh;
+  // max-height: 70vh;
+  height: 50vh;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 2px 1px white;
+
+  // background-color: rgb(231, 231, 231);
+//   background-color: $box-color;
+//   padding: 16px 0;
+  border-radius: 5px;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.dot {
+  background: #8179ce;
+  box-shadow: 0 0 1px 1px #ffffff40;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 5px;
+  animation: dot-animation 1s ease-in-out infinite;
+}
+
+@keyframes dot-animation {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.msg {
+  padding: 0.5rem 1rem;
+  color: white;
+  &:nth-child(even) {
+    background-color: $box-color;
+  }
+  &:nth-child(odd) {
+    // background-color: rgb(180, 129, 180);
+    background-color: $bg-color;
+  }
+}
