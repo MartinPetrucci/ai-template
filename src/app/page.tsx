@@ -1,22 +1,56 @@
 "use client";
-
 import styles from "./page.module.scss";
 import PropmtForm from "./components/PromptForm/PromptForm";
-// import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import ResponseBox from "./components/ResponseBox/ResponseBox";
+import useGenerateCompletion from "./hooks/custom/queries/useGenerateCompletion";
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { cacheTime: Infinity, staleTime: 100000 } },
-});
+type CompletionParams = {
+  prompt: string;
+  model: Model;
+  max_tokens?: number;
+  temperature?: number;
+};
 
-export default function Home() {
+enum Model {
+  DAVINCI = "text-davinci-003",
+  CURIE = "text-curie-001",
+  BABBAGE = "text-babbage-001",
+  ADA = "text-ada-001",
+}
+
+export default function ChatPage() {
+  const [messages, setMessages] = useState<string[]>([]);
+  const [params, setParams] = useState<CompletionParams>({
+    model: Model.ADA,
+    prompt: "",
+  });
+  const { refetch, completion, isFetching } = useGenerateCompletion(params);
+
+  const onSubmit = (message: string) => {
+    console.log(message);
+    setMessages([...messages, message]);
+  };
+
+  useEffect(() => {
+    if (params.prompt) {
+      refetch();
+    }
+  }, [params, refetch]);
+
+  useEffect(() => {
+    if (completion) {
+      setMessages([...messages, completion]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completion]);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <main className={styles.main}>
-        <PropmtForm />
-      </main>
+    <main className={styles.main}>
       <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+      <ResponseBox messages={messages} isLoading={isFetching} />
+      <PropmtForm onSub={onSubmit} setParams={setParams} />
+    </main>
   );
 }

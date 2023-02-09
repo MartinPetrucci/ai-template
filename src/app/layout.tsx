@@ -1,5 +1,14 @@
+"use client";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import Header from "./components/Header/Header";
 import "./globals.scss";
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { cacheTime: Infinity, staleTime: 100000 } },
+});
 
 export default function RootLayout({
   children,
@@ -7,16 +16,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      {/*
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        {/*
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
-      <head />
-      <body>
-        <Header />
-        {children}
-      </body>
-    </html>
+        <head />
+        <body>
+          <Header />
+          {children}
+        </body>
+      </html>
+    </QueryClientProvider>
   );
 }

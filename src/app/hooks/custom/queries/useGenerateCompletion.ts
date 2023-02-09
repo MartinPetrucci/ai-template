@@ -1,17 +1,10 @@
 import { CompletionParams, getCompletion } from "@/app/services";
 import { useQuery } from "@tanstack/react-query";
-
-enum QUERIES {
-  COMPLETION = "COMPLETION",
-}
-
-export type CompletionResponse = {
-  completion: string;
-};
+import { QUERIES } from ".";
 
 export default function useGenerateCompletion(params: CompletionParams) {
   const resultQuery = useQuery(
-    [QUERIES.COMPLETION],
+    [QUERIES.COMPLETION, params.prompt],
     () => getCompletion(params),
     {
       enabled: false,

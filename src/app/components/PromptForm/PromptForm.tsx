@@ -1,14 +1,18 @@
 "use client";
 import styles from "./styles.module.scss";
 import cn from "classnames";
-import ResponseBox from "../ResponseBox/ResponseBox";
-import useGenerateCompletion from "@/app/hooks/custom/useGenerateCompletion";
-import { CompletionParams, Model, MODELS } from "@/app/services";
+import { CompletionParams, Model, MODELS } from "../../../types";
 import { useForm } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form/dist/types";
-import { Fragment, useState } from "react";
+import { Dispatch, Fragment, SetStateAction } from "react";
 
-export default function PropmtForm() {
+export default function PropmtForm({
+  onSub,
+  setParams,
+}: {
+  onSub: (message: string) => void;
+  setParams: Dispatch<SetStateAction<CompletionParams>>;
+}) {
   const {
     watch,
     register,
@@ -18,14 +22,11 @@ export default function PropmtForm() {
   } = useForm<CompletionParams>({ defaultValues: { model: Model.ADA } });
   const [model, prompt] = watch(["model", "prompt"]);
   const params = { model, prompt };
-  const { completion, refetch, isFetching } = useGenerateCompletion(params);
-  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit: SubmitHandler<CompletionParams> = () => {
-    setSubmitted(true);
+    setParams(params);
+    onSub(prompt);
     reset({ ...params, prompt: "" });
-    refetch();
-    setSubmitted(false);
   };
 
   const validate = (field: keyof typeof errors) =>
@@ -35,11 +36,6 @@ export default function PropmtForm() {
 
   return (
     <div className={styles["prompt-form"]}>
-      <ResponseBox
-        userMsg={submitted ? prompt : ""}
-        isLoading={isFetching}
-        response={completion || ""}
-      />
       <form onSubmit={handleSubmit(onSubmit)} className={cn(styles.form)}>
         <div className={cn(styles["input-group"], styles["prompt"])}>
           <input

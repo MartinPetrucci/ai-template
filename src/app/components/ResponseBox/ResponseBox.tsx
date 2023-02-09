@@ -2,26 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 
 export default function ResponseBox({
-  response: modelMsg,
-  userMsg,
   isLoading,
+  messages,
 }: {
-  response: string;
-  userMsg: string;
   isLoading: boolean;
+  messages: string[];
 }) {
-  const [chat, setChat] = useState<string[]>([]);
   const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (modelMsg !== "") {
-      setChat((prev) => prev.concat(modelMsg));
-    }
-  }, [modelMsg]);
-  useEffect(() => {
-    if (userMsg !== "") {
-      setChat((prev) => prev.concat(userMsg));
-    }
-  }, [userMsg]);
 
   useEffect(() => {
     const { current } = ref;
@@ -32,7 +19,7 @@ export default function ResponseBox({
         lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
       }
     }
-  }, [isLoading, chat.length]);
+  }, [isLoading, messages.length]);
 
   const msgKey = (msg: string) => {
     return `${msg?.slice(0, 5)}-${new Date()}-${Math.random()}`;
@@ -40,7 +27,7 @@ export default function ResponseBox({
 
   return (
     <div className={styles["response-box"]} ref={ref}>
-      {chat.map((response) => (
+      {messages.map((response) => (
         <div className={styles.msg} key={msgKey(response)}>
           {response}
         </div>
