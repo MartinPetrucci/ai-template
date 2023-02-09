@@ -1,24 +1,12 @@
 "use client";
-
 import styles from "./styles.module.scss";
-import { Inter } from "@next/font/google";
 import cn from "classnames";
-import {
-  FocusEventHandler,
-  FormEvent,
-  FormEventHandler,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
 import ResponseBox from "../ResponseBox/ResponseBox";
 import useGenerateCompletion from "@/app/hooks/custom/useGenerateCompletion";
-import { CompletionParams, Model } from "@/app/services";
+import { CompletionParams, Model, MODELS } from "@/app/services";
 import { useForm } from "react-hook-form";
 import { SubmitHandler } from "react-hook-form/dist/types";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Fragment, useState } from "react";
 
 export default function PropmtForm() {
   const {
@@ -26,79 +14,56 @@ export default function PropmtForm() {
     register,
     reset,
     handleSubmit,
-    formState: { errors },
-  } = useForm<CompletionParams>();
+    formState: { errors, isSubmitted },
+  } = useForm<CompletionParams>({ defaultValues: { model: Model.ADA } });
   const [model, prompt] = watch(["model", "prompt"]);
-  const { completion, refetch, isFetching } = useGenerateCompletion({
-    model,
-    prompt,
-  });
+  const params = { model, prompt };
+  const { completion, refetch, isFetching } = useGenerateCompletion(params);
+  const [submitted, setSubmitted] = useState(false);
 
-  console.log(errors);
-
-  async function handleSubmitX(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const params = { model, prompt };
+  const onSubmit: SubmitHandler<CompletionParams> = () => {
+    setSubmitted(true);
     reset({ ...params, prompt: "" });
-    console.log({ params });
     refetch();
-  }
-  const onSubmit: SubmitHandler<CompletionParams> = (data) => console.log(data);
+    setSubmitted(false);
+  };
+
+  const validate = (field: keyof typeof errors) =>
+    errors[field] ? styles.error : "";
+
+  console.log("rendering");
 
   return (
     <div className={styles["prompt-form"]}>
-      <ResponseBox isLoading={isFetching} response={completion || ""} />
+      <ResponseBox
+        userMsg={submitted ? prompt : ""}
+        isLoading={isFetching}
+        response={completion || ""}
+      />
       <form onSubmit={handleSubmit(onSubmit)} className={cn(styles.form)}>
         <div className={cn(styles["input-group"], styles["prompt"])}>
-          <input type="text" {...register("prompt", { required: true })} />
-          <p>{errors.prompt && 'Este campo es requerido!!'}</p>
+          <input
+            className={validate("prompt")}
+            type="text"
+            {...register("prompt", { required: true })}
+          />
           <button type="submit">&gt;</button>
         </div>
         <div className={cn(styles["input-group"], styles.models)}>
-          <input
-            {...register("model")}
-            type="radio"
-            name="model"
-            id="ada"
-            value="text-ada-001"
-          />
-          <label htmlFor="ada">
-            <span>Ada</span>
-            <span>$0.0004 / 1k tokens</span>
-          </label>
-          <input
-            {...register("model")}
-            type="radio"
-            name="model"
-            id="babbage"
-            value="text-babbage-001"
-          />
-          <label htmlFor="babbage">
-            <span>Babagge</span>
-            <span>$0.0005 / 1k tokens</span>
-          </label>
-          <input
-            {...register("model")}
-            type="radio"
-            name="model"
-            id="curie"
-            value="text-curie-001"
-          />
-          <label htmlFor="curie">
-            <span>Curie</span>
-            <span>$0.0020 / 1k tokens</span>
-          </label>
-          <input
-            {...register("model")}
-            type="radio"
-            name="model"
-            id="davinci"
-            value="text-davinci-003"
-          />
-          <label htmlFor="davinci">
-            <span>Davinci</span>
-            <span>$0.0200 / 1k tokens</span>
-          </label>
+          {MODELS.map(({ commercialName, name, pricing }) => (
+            <Fragment key={commercialName}>
+              <input
+                type="radio"
+                id={commercialName}
+                value={name}
+                {...register("model")}
+              />
+              <label htmlFor={commercialName}>
+                <span>{commercialName}</span>
+                <span>{`$${pricing} / 1k tokens`}</span>
+              </label>
+            </Fragment>
+          ))}
         </div>
       </form>
     </div>

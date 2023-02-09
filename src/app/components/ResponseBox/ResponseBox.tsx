@@ -2,19 +2,26 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 
 export default function ResponseBox({
-  response,
+  response: modelMsg,
+  userMsg,
   isLoading,
 }: {
   response: string;
+  userMsg: string;
   isLoading: boolean;
 }) {
   const [chat, setChat] = useState<string[]>([]);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (response !== "") {
-      setChat((prev) => prev.concat(response));
+    if (modelMsg !== "") {
+      setChat((prev) => prev.concat(modelMsg));
     }
-  }, [response]);
+  }, [modelMsg]);
+  useEffect(() => {
+    if (userMsg !== "") {
+      setChat((prev) => prev.concat(userMsg));
+    }
+  }, [userMsg]);
 
   useEffect(() => {
     const { current } = ref;
@@ -34,7 +41,9 @@ export default function ResponseBox({
   return (
     <div className={styles["response-box"]} ref={ref}>
       {chat.map((response) => (
-        <div className={styles.msg} key={msgKey(response)}>{response}</div>
+        <div className={styles.msg} key={msgKey(response)}>
+          {response}
+        </div>
       ))}
       {isLoading && (
         <div className={styles.loader}>

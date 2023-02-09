@@ -14,6 +14,29 @@ export enum Model {
   ADA = "text-ada-001",
 }
 
+export const MODELS = [
+  {
+    name: Model.ADA,
+    commercialName: 'Ada',
+    pricing: 0.0004
+  },
+  {
+    name: Model.BABBAGE,
+    commercialName: 'Babbage',
+    pricing: 0.0005
+  },
+  {
+    name: Model.CURIE,
+    commercialName: 'Curie',
+    pricing: 0.0020
+  },
+  {
+    name: Model.DAVINCI,
+    commercialName: 'Davinci',
+    pricing: 0.0200
+  },
+]
+
 export enum ENDPOINTS {
   GENERATE = "api/generate",
   IMAGES = "api/images",
