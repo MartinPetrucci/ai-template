@@ -50,7 +50,6 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <h1>Probando</h1>
       <PropmtForm />
     </main>
   );
