@@ -14,7 +14,7 @@ export default async function image(req: NextApiRequest, res: NextApiResponse) {
     console.log(response.data.data);
     res.status(200).json({ images: response.data.data });
   } catch (error) {
-    console.log("hubo un error", error.message);
+    console.log("hubo un error", error);
     res.status(500).end();
   }
 }
