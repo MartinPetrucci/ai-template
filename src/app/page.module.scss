@@ -1,11 +1,13 @@
 .main {
-    width: min(100vw - 32px, 900px);
-    margin: 0 auto;
-    height: 100vh;
+    // width: min(100vw - 32px, 900px);
+    // margin: 0 auto;
     // display: flex;
     // flex-direction: column;
-    // justify-content: space-between;
-    // outline: 1px solid blue;
+    // align-items: center;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 7fr 1fr;
 
     h1 {
         color: white;

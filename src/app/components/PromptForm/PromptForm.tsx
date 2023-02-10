@@ -45,7 +45,7 @@ export default function PropmtForm({
           />
           <button type="submit">&gt;</button>
         </div>
-        <div className={cn(styles["input-group"], styles.models)}>
+        {/* <div className={cn(styles["input-group"], styles.models)}>
           {MODELS.map(({ commercialName, name, pricing }) => (
             <Fragment key={commercialName}>
               <input
@@ -60,7 +60,7 @@ export default function PropmtForm({
               </label>
             </Fragment>
           ))}
-        </div>
+        </div> */}
       </form>
     </div>
   );

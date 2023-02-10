@@ -1,4 +1,5 @@
-import { CompletionParams, getCompletion } from "@/app/services";
+import { getCompletion } from "@/app/services";
+import { CompletionParams } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { QUERIES } from ".";
 

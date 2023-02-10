@@ -2,34 +2,38 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./styles.module.scss";
-import cn from "classnames";
 export default function Header() {
   const path = usePathname();
   const links = [
     {
       href: "/",
-      label: "Chat",
+      label: "CHAT",
     },
     {
       href: "/images",
-      label: "Images",
+      label: "IMAGES",
+    },
+    {
+      href: "/docs",
+      label: "DOCS",
     },
   ];
-  console.log(path);
   return (
     <header className={styles.header}>
-      <Link
-        href="/"
-        className={cn(styles.link, path === "/" ? styles.active : "")}
-      >
-        Chat
-      </Link>
-      <Link
-        href="/images"
-        className={cn(styles.link, path === "/images" ? styles.active : "")}
-      >
-        Images
-      </Link>
+      <div className={styles.links}>
+        {links.map((link) => (
+          <Link
+            className={link.href === path ? styles.active : ""}
+            key={link.label}
+            href={link.href}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
+      <svg width="50" height="50">
+        <circle cx="25" cy="32" r="12" fill="white" />
+      </svg>
     </header>
   );
 }

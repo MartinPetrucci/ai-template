@@ -29,7 +29,7 @@ export default function ResponseBox({
     <div className={styles["response-box"]} ref={ref}>
       {messages.map((response) => (
         <div className={styles.msg} key={msgKey(response)}>
-          {response}
+          <p>{response}</p>
         </div>
       ))}
       {isLoading && (

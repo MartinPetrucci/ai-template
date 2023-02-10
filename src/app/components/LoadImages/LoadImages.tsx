@@ -2,8 +2,6 @@
 import cn from "classnames";
 import {
   FormEventHandler,
-  MouseEventHandler,
-  useEffect,
   useRef,
   useState,
 } from "react";
@@ -43,8 +41,8 @@ export default function LoadImages() {
     <div className={styles.cuadro}>
       <form onSubmit={handleSubmit}>
         <div className={cn(styles["input-group"], styles["prompt"])}>
-          <input ref={inputRef} type="text" name="prompt" />
-          <button>&gt;</button>
+          <input className="input" ref={inputRef} type="text" name="prompt" />
+          <button className="button">&gt;</button>
         </div>
       </form>
       <div className={styles["images-container"]}>
